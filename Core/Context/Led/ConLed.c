@@ -14,8 +14,8 @@ void LedStateClear(LED_DATA_t *pDat, uint8_t pLedIdx)
 	pDat->mLedBlinkCnt[pLedIdx] = 0;
 }
 
-void LedStateChange(LED_DATA_t *pDat, uint8_t pLedNo, LED_STATE pState,
-		LED_BLINK_RATE pRate)
+void LedStateChange(LED_DATA_t *pDat, uint8_t pLedNo, eLED_STATE pState,
+		eLED_BLINK_RATE pRate)
 {
 	LedStateClear(pDat, pLedNo - 1);
 	if (pState != LED_STATE_BLINK)
@@ -29,7 +29,7 @@ void LedStateChange(LED_DATA_t *pDat, uint8_t pLedNo, LED_STATE pState,
 	}
 }
 
-void CheckLed(LED_DATA_t *pDat)
+void LedProcess(LED_DATA_t *pDat)
 {
 	for (int i = 0; i < LED_COUNT; ++i)
 	{
@@ -109,6 +109,6 @@ void TaskLed()
 
 	while (1)
 	{
-		CheckLed(ptrLedData);
+		LedProcess(ptrLedData);
 	}
 }

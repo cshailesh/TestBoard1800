@@ -11,5 +11,6 @@
 #include "ContextHeader.h"
 
 void LedDataInit(LED_DATA_t *pDat);
+void LedProcess(LED_DATA_t *pDat);
 
 #endif /* CONLED_H */

@@ -1,14 +1,13 @@
 /*
- * CDeviceData.h
- *
- *  Created on: Nov 10, 2022
- *      Author: Aditya
+ *  Created on: 20 SEPT 2022
+ *  Author: LINK4
  */
 
-#ifndef CONTEXT_CDEVICEDATA_H_
-#define CONTEXT_CDEVICEDATA_H_
+#ifndef CONTEXT_CDEVICEDATATYPES_H_
+#define CONTEXT_CDEVICEDATATYPES_H_
 
 #include "main.h"
+#include "CModBusData.h"
 
 typedef struct
 {
@@ -16,19 +15,28 @@ typedef struct
 
 } ANALOG_OUT_DATA_t;
 
+//---------------------
+// DIGITAL DATA
+//---------------------
+
+
 typedef struct
 {
-	uint32_t mDigVal[8];
+  uint8_t mDOut[8];
 } DIGITAL_OUT_DATA_t;
 
 //---------------------
 // PWM DATA
 //---------------------
+
 #define PWM_CHANNEL_CNT	4
 #define PWM_VAL_t	uint16_t
 typedef struct
 {
-	PWM_VAL_t mPWMCurVal[8];
+	PWM_VAL_t mPercent[8];
+	PWM_VAL_t mTIMCompare[8];
+	uint8_t mDirty[8];
+
 } PWM_OUT_DATA_t;
 
 //---------------------
@@ -43,20 +51,23 @@ typedef enum
 	LED_BLINK_SPEED_SLOW = 1000,
 	LED_BLINK_SPEED_MED = 500,
 	LED_BLINK_SPEED_FAST = 100
-} LED_BLINK_RATE;
+} eLED_BLINK_RATE;
 
 typedef enum
 {
 	LED_STATE_ON = 1, LED_STATE_OFF, LED_STATE_BLINK,
-} LED_STATE;
+} eLED_STATE;
 
 typedef struct
 {
-	LED_STATE mLedState[LED_COUNT];
-	LED_BLINK_RATE mLedBlinkRate[LED_COUNT];
-	uint32_t mLedBlinkCnt[LED_COUNT]; /// USED IN SYSTICKS
-
+	eLED_STATE mLedState[LED_COUNT];
+	eLED_BLINK_RATE mLedBlinkRate[LED_COUNT];
+	uint32_t mLedBlinkCnt[LED_COUNT];
 } LED_DATA_t;
+
+//---------------------
+// GPIO DATA
+//---------------------
 
 typedef struct
 {
@@ -65,6 +76,9 @@ typedef struct
 	PWM_OUT_DATA_t mPwmData;
 	LED_DATA_t mLedData;
 
+	MODBUS_SLAVE_DATA_t mModbusSlave1;
+	MODBUS_SLAVE_DATA_t mModbusSlave2;
+
 } CONTEXT_DATA_t;
 
-#endif /* CONTEXT_CDEVICEDATA_H_ */
+#endif /* CONTEXT_CDEVICEDATATYPES_H_ */
