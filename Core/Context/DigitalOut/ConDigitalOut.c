@@ -4,67 +4,69 @@
  */
 #include "ConDigitalOut.h"
 
-void DigitalOutSetPin(DIGITAL_OUT_DATA_t *pDat, uint8_t pPinNo, uint8_t pHiLow)
-{
-	pDat->mDOut[pPinNo - 1] = pHiLow;
-}
 
-void DigitOutProcessPin(uint8_t pNo, uint8_t pVal)
+void _DigitOutProcessPin(uint8_t pNo, uint8_t pVal)
 {
 	switch (pNo)
 	{
 	case 0:
 		if (pVal > 0)
-			DOut1_ON();
+			_DOut1_ON();
 		else
-			DOut1_OFF();
+			_DOut1_OFF();
 		break;
 	case 1:
 		if (pVal > 0)
-			DOut2_ON();
+			_DOut2_ON();
 		else
-			DOut2_OFF();
+			_DOut2_OFF();
 		break;
 	case 2:
 		if (pVal > 0)
-			DOut3_ON();
+			_DOut3_ON();
 		else
-			DOut3_OFF();
+			_DOut3_OFF();
 		break;
 	case 3:
 		if (pVal > 0)
-			DOut4_ON();
+			_DOut4_ON();
 		else
-			DOut4_OFF();
+			_DOut4_OFF();
 		break;
 	case 4:
 		if (pVal > 0)
-			DOut5_ON();
+			_DOut5_ON();
 		else
-			DOut5_OFF();
+			_DOut5_OFF();
 		break;
 	case 5:
 		if (pVal > 0)
-			DOut6_ON();
+			_DOut6_ON();
 		else
-			DOut6_OFF();
+			_DOut6_OFF();
 		break;
 	case 6:
 		if (pVal > 0)
-			DOut7_ON();
+			_DOut7_ON();
 		else
-			DOut7_OFF();
+			_DOut7_OFF();
 		break;
 	case 7:
 		if (pVal > 0)
-			DOut8_ON();
+			_DOut8_ON();
 		else
-			DOut8_OFF();
+			_DOut8_OFF();
 		break;
 	default:
 		break;
 	}
 }
+
+void DigitalOutSetPin(DIGITAL_OUT_DATA_t *pDat, uint8_t pPinNo, uint8_t pHiLow)
+{
+	pDat->mDOut[pPinNo - 1] = pHiLow;
+}
+
 
 void DigitOutInit(DIGITAL_OUT_DATA_t *pDat)
 {
@@ -73,7 +75,6 @@ void DigitOutInit(DIGITAL_OUT_DATA_t *pDat)
 		DigitalOutSetPin(pDat, i + 1, 0);
 	}
 	DigitalOutProcess(pDat);
-
 }
 
 void DigitalOutProcess(DIGITAL_OUT_DATA_t *pDat)
@@ -83,7 +84,7 @@ void DigitalOutProcess(DIGITAL_OUT_DATA_t *pDat)
 	for (uint8_t i = 0; i < 8; ++i)
 	{
 		val = pDat->mDOut[i];
-		DigitOutProcessPin(i, val);
+		_DigitOutProcessPin(i, val);
 	}
 }
 

@@ -8,7 +8,7 @@
 #ifndef CKEYBOARD_H_
 #define CKEYBOARD_H_
 
-#include "ContextHeader.h"
+#include <ConHeader.h>
 
 #define KEYBRD_NONE		5
 #define KEYBRD_SW1		11
@@ -37,7 +37,7 @@
 
 #define KEYBOARD_DELAY 10
 
-uint8_t ReadKeyPin();
+uint8_t _ReadKeyPin();
 uint8_t ReadKeyBoard();
 uint8_t GetKeyPressed();
 void ResetKeyPresed();

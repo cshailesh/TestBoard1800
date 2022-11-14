@@ -6,6 +6,9 @@
 #include "ConModbusSlave.h"
 
 
+void ModBusSlave1Init(MODBUS_SLAVE_DATA_t *pDat) {};
+void ModBusSlave2Init(MODBUS_SLAVE_DATA_t *pDat) {};
+
 void ModBusSlave1Process(MODBUS_SLAVE_DATA_t *pDat) {};
 void ModBusSlave2Process(MODBUS_SLAVE_DATA_t *pDat) {};
 

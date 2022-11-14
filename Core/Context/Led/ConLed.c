@@ -7,17 +7,15 @@
 
 #include "ConLed.h"
 
-void LedStateClear(LED_DATA_t *pDat, uint8_t pLedIdx)
+void _LedStateClear(LED_DATA_t *pDat, uint8_t pLedIdx)
 {
 	pDat->mLedState[pLedIdx] = LED_STATE_OFF;
-	pDat->mLedBlinkRate[pLedIdx] = LED_BLINK_SPEED_NONE;
-	pDat->mLedBlinkCnt[pLedIdx] = 0;
 }
 
 void LedStateChange(LED_DATA_t *pDat, uint8_t pLedNo, eLED_STATE pState,
 		eLED_BLINK_RATE pRate)
 {
-	LedStateClear(pDat, pLedNo - 1);
+	_LedStateClear(pDat, pLedNo - 1);
 	if (pState != LED_STATE_BLINK)
 	{
 		pDat->mLedState[pLedNo - 1] = LED_STATE_BLINK;
@@ -39,17 +37,17 @@ void LedProcess(LED_DATA_t *pDat)
 			{
 				if (i == 0)
 				{
-					LED1_TOG();
+					_LED1_TOG();
 					pDat->mLedBlinkCnt[i] = 0;
 				}
 				if (i == 1)
 				{
-					LED2_TOG();
+					_LED2_TOG();
 					pDat->mLedBlinkCnt[i] = 0;
 				}
 				if (i == 2)
 				{
-					LED3_TOG();
+					_LED3_TOG();
 					pDat->mLedBlinkCnt[i] = 0;
 				}
 			}
@@ -58,17 +56,17 @@ void LedProcess(LED_DATA_t *pDat)
 		{
 			if (i == 0)
 			{
-				LED1_OFF();
+				_LED1_OFF();
 				pDat->mLedBlinkCnt[i] = 0;
 			}
 			if (i == 1)
 			{
-				LED2_OFF();
+				_LED2_OFF();
 				pDat->mLedBlinkCnt[i] = 0;
 			}
 			if (i == 2)
 			{
-				LED3_OFF();
+				_LED3_OFF();
 				pDat->mLedBlinkCnt[i] = 0;
 			}
 		}
@@ -76,17 +74,17 @@ void LedProcess(LED_DATA_t *pDat)
 		{
 			if (i == 0)
 			{
-				LED1_ON();
+				_LED1_ON();
 				pDat->mLedBlinkCnt[i] = 0;
 			}
 			if (i == 1)
 			{
-				LED2_ON();
+				_LED2_ON();
 				pDat->mLedBlinkCnt[i] = 0;
 			}
 			if (i == 2)
 			{
-				LED3_ON();
+				_LED3_ON();
 				pDat->mLedBlinkCnt[i] = 0;
 			}
 		}
@@ -96,9 +94,9 @@ void LedProcess(LED_DATA_t *pDat)
 
 void LedDataInit(LED_DATA_t *pDat)
 {
-	LedStateClear(pDat, 0);
-	LedStateClear(pDat, 1);
-	LedStateClear(pDat, 2);
+	_LedStateClear(pDat, 0);
+	_LedStateClear(pDat, 1);
+	_LedStateClear(pDat, 2);
 }
 
 void TaskLed()

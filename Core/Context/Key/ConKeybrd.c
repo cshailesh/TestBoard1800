@@ -1,8 +1,6 @@
 /*
- * ConKeybrd.h
- *
- *  Created on: Feb 10, 2022
- *      Author: ADITYA
+ *  Created on: 20 SEPT 2022
+ *  Author: LINK4
  */
 #include "ConKeybrd.h"
 
@@ -11,34 +9,22 @@ void ProcessKeyboardPress(CONTEXT_DATA_t *pCD, uint8_t pKey)
 {
 	if (pKey == KEYBRD_SW1)
 	{
-//			if (pCD->mIsOn == 1)
-//			{
-//				OPDLightsOff(pCD, 0);
-//			}
-//			else
-//			{
-//				pCD->mIsOn = 1;
-//			}
+		LedStateChange(&pCD->mLedData, 3, LED_STATE_BLINK,LED_BLINK_SPEED_SLOW);
 		gKeyboardLastProcessedKey = KEYBRD_SW1;
 	}
 	else if (pKey == KEYBRD_SW2)
 	{
-//			pCD->mCurUser = 0;
-//			OPDLightsSetHalf(pCD, 0);
-//			pCD->mIsOn = 1;
+		LedStateChange(&pCD->mLedData, 3, LED_STATE_BLINK,LED_BLINK_SPEED_MED);
 		gKeyboardLastProcessedKey = KEYBRD_SW2;
 	}
 	else if (pKey == KEYBRD_SW3)
 	{
-//			OPDLightIncDec(0, 1, 0, pCD, 0);
-//			pCD->mIsOn = 1;
+		LedStateChange(&pCD->mLedData, 3, LED_STATE_BLINK,LED_BLINK_SPEED_FAST);
 		gKeyboardLastProcessedKey = KEYBRD_SW3;
 	}
 
 	else if (pKey == KEYBRD_SW4)
 	{
-//			OPDLightIncDec(0, 0, 1, pCD, 0);
-//			pCD->mIsOn = 1;
 		gKeyboardLastProcessedKey = KEYBRD_SW4;
 	}
 
@@ -48,5 +34,4 @@ void ProcessKeyboardPress(CONTEXT_DATA_t *pCD, uint8_t pKey)
 //			Buzzer_Do_Beep();
 	}
 }
-
 

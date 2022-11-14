@@ -1,8 +1,3 @@
-/*
- *  Created on: 20 SEPT 2022
- *  Author: LINK4
- */
-
 #ifndef CONTEXT_CDEVICEDATATYPES_H_
 #define CONTEXT_CDEVICEDATATYPES_H_
 
@@ -19,10 +14,9 @@ typedef struct
 // DIGITAL DATA
 //---------------------
 
-
 typedef struct
 {
-  uint8_t mDOut[8];
+	uint8_t mDOut[8];
 } DIGITAL_OUT_DATA_t;
 
 //---------------------
@@ -33,9 +27,9 @@ typedef struct
 #define PWM_VAL_t	uint16_t
 typedef struct
 {
-	PWM_VAL_t mPercent[8];
-	PWM_VAL_t mTIMCompare[8];
-	uint8_t mDirty[8];
+	PWM_VAL_t mPercent[PWM_CHANNEL_CNT];
+	PWM_VAL_t mTIMCompare[PWM_CHANNEL_CNT];
+	uint8_t mDirty[PWM_CHANNEL_CNT];
 
 } PWM_OUT_DATA_t;
 

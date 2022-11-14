@@ -8,7 +8,7 @@
 #ifndef CONTEXT_MODBUSSLAVE_CMODBUSDATA_H_
 #define CONTEXT_MODBUSSLAVE_CMODBUSDATA_H_
 
-#include "ContextHeader.h"
+#include <ConHeader.h>
 
 #define MODBUS_RX_DATA_BUFF_SIZE 256
 #define MODBUS_TX_DATA_BUFF_SIZE 256

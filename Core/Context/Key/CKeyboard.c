@@ -10,7 +10,7 @@
 uint8_t gKeyPressed;
 uint8_t gKeyLastPressed;
 
-uint8_t ReadKeyPin()
+uint8_t _ReadKeyPin()
 {
 
 	uint32_t tickstart = HAL_GetTick();
@@ -67,7 +67,7 @@ uint8_t ReadKeyPin()
 
 uint8_t ReadKeyBoard()
 {
-	gKeyPressed = ReadKeyPin();
+	gKeyPressed = _ReadKeyPin();
 	if (gKeyPressed != KEYBRD_NONE)
 	{
 		gKeyLastPressed = gKeyPressed;

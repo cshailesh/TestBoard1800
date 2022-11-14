@@ -8,7 +8,7 @@
 #ifndef CMODBUS_SLAVE_H_
 #define CMODBUS_SLAVE_H_
 
-#include "ContextHeader.h"
+#include <ConHeader.h>
 
 
 #endif /* CMODBUS_SLAVE_H_ */
