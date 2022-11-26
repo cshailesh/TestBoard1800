@@ -151,7 +151,48 @@
 //				0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
 //						0xffff, } };
 //
-//
+//void modbusInit(ModbusBase_t *pMb_t, UART_HandleTypeDef *huart,
+//		GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, BR_define_td br,
+//		uint8_t hardwave_control, ModbusType modbusType)
+//{
+//	pMb_t->huart = huart;
+//	pMb_t->modbusType = modbusType;
+//	if (!hardwave_control)
+//	{
+//		pMb_t->GPIOx = GPIOx;
+//		pMb_t->GPIO_Pin = GPIO_Pin;
+//	}
+//	pMb_t->HardwaveFlow = hardwave_control;
+//	pMb_t->MB_registers.MBpointer = pMb_t->ModbusBuffer;
+//	pMb_t->MB_registers.MB_index = 0;
+//	pMb_t->MB_registers.MB_byte_count = 1;
+//	pMb_t->Frame_start_timer = 0xff;
+//	pMb_t->Modbus_status = MB_STATUS_CLEAR;
+//	baudRateSet(pMb_t, br);
+//	Modbus_ReceiveInterrupt(pMb_t);
+//}
+//void Modbus_ReceiveInterrupt(ModbusBase_t *m_t)
+//{
+//	HAL_UART_Receive_IT(m_t->huart, &(m_t->RX_Data), 1);
+//}
+//void modbusFrameWait(ModbusBase_t *m_t)
+//{
+//	if (m_t->Frame_start_timer <= m_t->Time3_5)
+//	{
+//		m_t->Frame_start_timer++;
+//		return;
+//	}
+//	if (m_t->Modbus_status & MB_TX_RUN)
+//	{
+//		//newFrameWait();
+//		m_t->Modbus_status &= ~MB_TX_RUN;
+//	}
+//	if (m_t->Modbus_status & MB_RX_RUN)
+//	{
+//		m_t->Modbus_status |= MB_RX_FRAME_END;
+//		m_t->Modbus_status &= ~MB_RX_RUN;
+//	}
+//}
 ///*
 // uint8_t uartTXHandler(void)
 // {
@@ -166,7 +207,106 @@
 // return 1;
 // }*/
 //
+//uint8_t uartRXHandler(ModbusBase_t *m_t)
+//{
+//	if (m_t->Modbus_status & MB_RX_RUN)
+//	{
+//		if (m_t->Frame_start_timer >= m_t->Time1_5)
+//		{
+//			m_t->MB_registers.MB_index = 0;
+//			m_t->Modbus_status &= ~MB_RX_RUN;
+//			m_t->Frame_start_timer = 0;
+//			return 1;
+//		}
+//		if (m_t->MB_registers.MB_index < MAX_MB_BUFFER_SIZE)
+//		{
+//			m_t->MB_registers.MBpointer[m_t->MB_registers.MB_index] =
+//					m_t->RX_Data;
+//			m_t->MB_registers.MB_index++;
+//			m_t->Frame_start_timer = 0;
+//			return 0;
+//		}
+//		return 2;
+//	}
+//	if (m_t->Frame_start_timer >= m_t->Time3_5)
+//	{
+//		m_t->MB_registers.MB_index = 0;
+//		m_t->Modbus_status |= MB_RX_RUN;
+//		m_t->MB_registers.MBpointer[m_t->MB_registers.MB_index] = m_t->RX_Data;
+//		m_t->MB_registers.MB_index++;
+//		m_t->Frame_start_timer = 0;
+//	}
+//	return 0;
+//}
 //
+//void newFrameWait(ModbusBase_t *m_t)
+//{
+//	m_t->MB_registers.MB_index = 0;
+//	//RS485_RX_ENABLE();
+//	if (!m_t->HardwaveFlow)
+//	{
+//		//HAL_GPIO_WritePin(m_t->GPIOx,m_t->GPIO_Pin,GPIO_PIN_RESET);
+//	}
+//
+//}
+//
+//void modbusFrameControl(ModbusBase_t *m_t, uint8_t Device_address)
+//{
+//	if (m_t->Modbus_status & MB_TX_RUN)
+//	{
+//		return;
+//	}
+//
+//	if (m_t->Modbus_status & MB_RX_FRAME_END)
+//	{
+//		uint8_t temp_DeviceAdres;
+//		m_t->Modbus_status &= ~MB_BROADCASTS; /* Broadcasts disable */
+//		if (m_t->modbusType == Modbus_Master)
+//		{
+//			temp_DeviceAdres = m_t->MasterDeviceAddres;
+//		}
+//		else
+//		{
+//			temp_DeviceAdres = Device_address;
+//
+//		}
+//		if (temp_DeviceAdres
+//				!= m_t->ModbusBuffer[MASTER_READ_DEVICE_ADRESS_INDEX]) // Adres kontrol kapatilmistir
+//		{
+//			if (0 == m_t->ModbusBuffer[0])
+//			{
+//				//Modbus_status |= MB_BROADCASTS;        /* Broadcasts enable */
+//			}
+//			else
+//			{
+//				newFrameWait(m_t);
+//				m_t->Modbus_status &= ~MB_RX_FRAME_END;
+//				return;
+//			}
+//		}
+//		if (m_t->MB_registers.MB_index >= MIN_RX_BYTE_NUMBER)
+//		{
+//			if (!CRC16Calculate(m_t, m_t->MB_registers.MB_index))
+//			{
+//				if (m_t->modbusType == Modbus_Slave)
+//				{
+//					setLimitValsTablePointer(m_t, MB_limit_value_table);
+//					modbusSLAVE_RXHandler(m_t);
+//				}
+//				else if (m_t->modbusType == Modbus_Master)
+//				{
+//					modbusMASTER_RXHandler(m_t);
+//				}
+//
+//				// TO DO
+//
+//				//*//////
+//			}
+//		}
+//		newFrameWait(m_t);
+//		m_t->Modbus_status &= ~MB_RX_FRAME_END;
+//	}
+//}
 //
 //void setLimitValsTablePointer(ModbusBase_t *m_t,
 //		const MB_range_td *MB_limit_val_table)
@@ -195,20 +335,71 @@
 //	m_t->MB_valid_address -= m_t->pLimit_vals_table->MbStarting_address;
 //}
 //
+//void modbusSLAVE_RXHandler(ModbusBase_t *m_t)
+//{
+//	if (m_t->Modbus_status & MB_BROADCASTS) /*Broadcast gelen ise read fonksiyonlar �al��mayacak */
+//	{
+//		switch (m_t->ModbusBuffer[RXBF_FUCT_INDEX])
+//		{
+//
+//		case MODBUS_FUNC_WRITE_SINGLE_COIL:
+//			modbusWriteSingleCoil(m_t);
+//			break;
+//		case MODBUS_FUNC_WRITE_MULTIPLE_COILS:
+//			modbusWriteMultipleCoil(m_t);
+//			break;
+//		case MODBUS_FUNC_WRITE_SINGLE_REGISTER:
+//			modbusWriteSingleHoldingRegister(m_t);
+//			break;
+//		case MODBUS_FUNC_WRITE_MULTIPLE_REGISTERS:
+//			modbusWriteMultipleHoldingRegister(m_t);
+//			break;
+//		default:
+//			sendExceptionCode(m_t, MB_FUNCTION_ERROR);
+//			return;
+//		}
+//	}
+//	switch (m_t->ModbusBuffer[RXBF_FUCT_INDEX])
+//	{
+//	case MODBUS_FUNC_READ_COIL_STATUS:
+//		modbusReadCoilStatus(m_t);
+//		break;
+//	case MODBUS_FUNC_READ_INPUT_STATUS:
+//		modbusDiscrateStatus(m_t);
+//		break;
+//	case MODBUS_FUNC_READ_HOLDING_REGISTERS:
+//		modbusReadHoldingRegisters(m_t);
+//		break;
+//	case MODBUS_FUNC_READ_INPUT_REGISTERS:
+//		modbusReadInputRegisters(m_t);
+//		break;
+//	case MODBUS_FUNC_WRITE_SINGLE_COIL:
+//		modbusWriteSingleCoil(m_t);
+//		break;
+//	case MODBUS_FUNC_WRITE_MULTIPLE_COILS:
+//		modbusWriteMultipleCoil(m_t);
+//		break;
+//	case MODBUS_FUNC_WRITE_SINGLE_REGISTER:
+//		modbusWriteSingleHoldingRegister(m_t);
+//		break;
+//	case MODBUS_FUNC_WRITE_MULTIPLE_REGISTERS:
+//		modbusWriteMultipleHoldingRegister(m_t);
+//		break;
+//	default:
+//		sendExceptionCode(m_t, MB_FUNCTION_ERROR);
+//	}
+//}
 //void inputQuantityAndAddressSet(ModbusBase_t *m_t)
 //{
 //	m_t->Phisical_address = m_t->pLimit_vals_table->PhisicalInputs_address;
 //	m_t->Max_quantity = m_t->pLimit_vals_table->Inputs_quantity;
 ////  Phisical_address_end = Phisical_address + Max_quantity;
 //}
-
 //void modbusReadInputRegisters(ModbusBase_t *m_t)
 //{
 //	inputQuantityAndAddressSet(m_t);
 //	modbusReadRegisters(m_t);
 //}
-
-
 //void modbusReadRegisters(ModbusBase_t *m_t)
 //{
 //	uint8_t TX_buffer_index = 3; /* Cevap ba�lang�� indexi */
@@ -281,6 +472,38 @@
 //	}
 //	bitStatusTransmit(m_t);
 //}
+//void bitStatusTransmit(ModbusBase_t *m_t)
+//{
+//	uint8_t Byte_count, index;
+//	coilBitAddressSet(m_t);
+//	Byte_count = m_t->Received_quantity / 8;
+//	if (m_t->Received_quantity % 8)
+//		Byte_count++;
+//	m_t->ModbusBuffer[2] = Byte_count;
+//	index = 3;
+//	m_t->ModbusBuffer[index] = 0;
+//	uint8_t *pBuffer = (uint8_t*) m_t->Phisical_address;
+//	while (m_t->Received_quantity)
+//	{
+//		if (pBuffer[m_t->MB_valid_address] & m_t->Bit_mask)
+//		{
+//			m_t->ModbusBuffer[index] |= m_t->Bit_wr_mask;
+//		}
+//		if (!(m_t->Bit_wr_mask <<= 1))
+//		{
+//			m_t->Bit_wr_mask = 1;
+//			index++;
+//			m_t->ModbusBuffer[index] = 0;
+//		}
+//		if (!(m_t->Bit_mask <<= 1))
+//		{
+//			m_t->Bit_mask = 1;
+//			(m_t->MB_valid_address)++;
+//		}
+//		m_t->Received_quantity--;
+//	}
+//	sendResponse(m_t, Byte_count + 3);
+//}
 //uint8_t singleAddressControl(ModbusBase_t *m_t, uint16_t Max_value)
 //{
 //#ifdef BIG_ENDIAN
@@ -312,13 +535,93 @@
 //	m_t->Max_quantity = m_t->pLimit_vals_table->Holdings_quantity;
 ////  Phisical_address_end = Phisical_address + Max_quantity;
 //}
+//void modbusWriteSingleHoldingRegister(ModbusBase_t *m_t)
+//{
+//	holdingQuantityAndAddressSet(m_t);
+//	uint8_t Exception;
+//	Exception = singleAddressControl(m_t, 0xffff);
+//	if (Exception)
+//	{
+//		sendExceptionCode(m_t, Exception);
+//		return;
+//	}
+//	writeMultipleRegister(m_t, 1, 4); /*Modbus Buffer[4] deki 1 word datat� holdinge yaz*/
+//	sendResponse(m_t, 6); /* RX bufferdeki 6 byte geri yollan�yor */
+//}
+///*-- WRITE MULTIPLE REGISTER ALT FONKS�YONU ----------------------------------*/
+//void writeMultipleRegister(ModbusBase_t *m_t, uint8_t Wr_word_count,
+//		uint8_t Wr_data_index)
+//{
+//	uint8_t *pBuffer = (uint8_t*) m_t->Phisical_address;
+//	uint16_t Holding_index = m_t->MB_valid_address * 2;
+//	while (Wr_word_count--)
+//	{
+//#ifdef BIG_ENDIAN
+///* Big Endian ise ------------------------------------------------------------*/
+//    pBuffer[Holding_index] = m_t->ModbusBuffer[Wr_data_index];
+//    Wr_data_index++;
+//    Holding_index++;
+//    pBuffer[Holding_index] = m_t->ModbusBuffer[Wr_data_index];
+//    Wr_data_index++;
+//    Holding_index++;
+//#else
+//		/* Little Endian ise ------------------------------------------------------------*/
+//		int16_t temp = 0;
+//		((uint8_t*) &temp)[0] = m_t->ModbusBuffer[Wr_data_index + 1];
+//		((uint8_t*) &temp)[1] = m_t->ModbusBuffer[Wr_data_index];
+//		m_t->limit_counter = (uint8_t) (Holding_index / 2);
 //
+//		if (temp <= Holding_Limit[m_t->limit_counter].up_limit
+//				&& temp >= Holding_Limit[m_t->limit_counter].down_limit)
+//		{
+//			pBuffer[Holding_index + 1] = m_t->ModbusBuffer[Wr_data_index];
+//			Wr_data_index++;
+//			pBuffer[Holding_index] = m_t->ModbusBuffer[Wr_data_index];
+//			Holding_index += 2;
+//			Wr_data_index++;
+//			m_t->Holding_Register_Change_Flag = 1;
+//			MB_Set_HoldingChangeControl_flag(m_t);
+//
+//		}
+//		else
+//		{
+//			Wr_data_index += 2;
+//			Holding_index += 2;
+//		}
+//#endif
+//	}
+//}
+//void MB_Set_HoldingChangeControl_flag(ModbusBase_t *m_t)
+//{
+//	m_t->Holding_Register_Change_Control_Flag = 1;
+//}
+//void modbusWriteMultipleHoldingRegister(ModbusBase_t *m_t)
+//{
+//	holdingQuantityAndAddressSet(m_t);
+//	uint8_t Exception;
+//	Exception = quantityAndAddressControl(m_t);
+//	if (Exception)
+//	{
+//		sendExceptionCode(m_t, Exception);
+//		return;
+//	}
+//	writeMultipleRegister(m_t, m_t->Received_quantity, 7);
+//	sendResponse(m_t, 6); /* RX bufferdeki 6 byte geri yollan�yor */
+//}
+//void coilBitAddressSet(ModbusBase_t *m_t)
+//{
+//	m_t->Bit_mask = 1 << (m_t->MB_valid_address % 8); // Ge�erli Coil bit maskesi
+//	m_t->MB_valid_address /= 8;                      // Ge�erli Coil byte adresi
+//	m_t->Bit_wr_mask = 1;
+//}
 //void coilsQuantityAndAddressSet(ModbusBase_t *m_t)
 //{
 //	m_t->Phisical_address = m_t->pLimit_vals_table->PhisicalCoils_address;
 //	m_t->Max_quantity = m_t->pLimit_vals_table->Coils_quantity;
 //	// Phisical_address_end = Phisical_address + Max_quantity;
 //}
+
+
 //uint8_t quantityAndAddressControl(ModbusBase_t *m_t)
 //{
 //#ifdef BIG_ENDIAN
@@ -345,7 +648,83 @@
 //	}
 //	return MB_QUANTITY_ERROR;
 //}
+
+///*-- WRITE MULTI COILS FONKS�YONU (FONKSIYON KODU 0x0F) ----------------------*/
+//void modbusWriteMultipleCoil(ModbusBase_t *m_t)
+//{
+//	coilsQuantityAndAddressSet(m_t);
+//	uint8_t Exception = quantityAndAddressControl(m_t);
+//	if (Exception)
+//	{
+//		sendExceptionCode(m_t, Exception);
+//		return;
+//	}
+//	coilBitAddressSet(m_t);
+//	writeMultiCoils(m_t, m_t->Received_quantity, 7,
+//			m_t->ModbusBuffer[RXBF_BYTECOUNT_INDEX]);
+//	sendResponse(m_t, 6);
+//}
+//void writeMultiCoils(ModbusBase_t *m_t, uint16_t Bit_count,
+//		uint8_t RX_buffer_index, uint8_t Byte_count)
+//{
+//	uint8_t *pBuffer = (uint8_t*) (m_t->Phisical_address);
+//	while (Bit_count)
+//	{
+//		if (m_t->ModbusBuffer[RX_buffer_index] & m_t->Bit_wr_mask)
+//		{
+//			pBuffer[m_t->MB_valid_address] |= m_t->Bit_mask;
+//		}
+//		else
+//		{
+//			pBuffer[m_t->MB_valid_address] &= ~(m_t->Bit_mask);
+//		}
+//		if (!(m_t->Bit_mask <<= 1))
+//		{
+//			m_t->Bit_mask = 1;
+//			(m_t->MB_valid_address)++;
+//		}
+//		if (!(m_t->Bit_wr_mask <<= 1))
+//		{
+//			m_t->Bit_wr_mask = 1;
+//			RX_buffer_index++;
+//			if (--Byte_count == 0)
+//				return;
+//		}
+//		Bit_count--;
+//	}
+//}
+//void modbusWriteSingleCoil(ModbusBase_t *m_t)
+//{
+//	coilsQuantityAndAddressSet(m_t);
+//#ifdef BIG_ENDIAN
+///* Big Endian ise ------------------------------------------------------------*/
+//  ((int8_t*)&m_t->Received_quantity)[0] = m_t->ModbusBuffer[RXBF_SCVAL_INDEX];   /* Coil value MSB byte */
+//  ((int8_t*)&m_t->Received_quantity)[1] = m_t->ModbusBuffer[RXBF_SCVAL_INDEX+1]; /* Coil value LSB byte */
+//#else
+//	/* Little Endian ise ------------------------------------------------------------*/
 //
+//	((int8_t*) &m_t->Received_quantity)[1] =
+//			m_t->ModbusBuffer[RXBF_SCVAL_INDEX]; /* Coil value MSB byte */
+//	((int8_t*) &m_t->Received_quantity)[0] = m_t->ModbusBuffer[RXBF_SCVAL_INDEX
+//			+ 1]; /* Coil value LSB byte */
+//#if !defined BIG_ENDIAN && !defined LITTLE_ENDIAN
+//#error "sys_config.h dosyas�nda LITTEL_ENDIAN veya BIG_ENDIAN se�imi yap�lmad� "
+//#endif
+//#endif /* BIG_ENDIAN */
+//	if (!(m_t->Received_quantity == 0xFF00 || m_t->Received_quantity == 0x0000))
+//	{
+//		sendExceptionCode(m_t, MB_QUANTITY_ERROR);
+//		return;
+//	}
+//	if (m_t->MB_valid_address >= m_t->Max_quantity)
+//	{
+//		sendExceptionCode(m_t, MB_ADDRES_ERROR);
+//		return;
+//	}
+//	coilBitAddressSet(m_t);
+//	writeMultiCoils(m_t, 1, 4, 1);
+//	sendResponse(m_t, 6);
+//}
 ////// MASTER SIDE
 //
 //void modbusMASTER_RXHandler(ModbusBase_t *m_t)
@@ -391,8 +770,22 @@
 //
 //	sendResponse(m_t, 6);
 //}
+//void ModbusWrite_Reg(ModbusBase_t *m_t, WriteReg_TypeDef reg_type,
+//		uint8_t slave_addr, uint16_t reg_addr, int16_t value)
+//{
+//	m_t->masterReqDataAddres = reg_addr;
 //
+//	m_t->MasterDeviceAddres = slave_addr;
+//	m_t->ModbusBuffer[0] = slave_addr;                   // Device Adres
+//	m_t->ModbusBuffer[1] = (uint8_t) reg_type;             // Register Type
+//	m_t->ModbusBuffer[2] = reg_addr >> 8;                  // MSB Register Adr
+//	m_t->ModbusBuffer[3] = (uint8_t) reg_addr;            // LSB Register Adr
+//	m_t->ModbusBuffer[4] = (value >> 8) & 0xFF;             // MSB Byte Count
+//	m_t->ModbusBuffer[5] = value & 0xFF;     //gerekesiz       // LSB Byte Count
 //
+//	sendResponse(m_t, 6);
+//
+//}
 //void Master_Read_Coil_Discrete(ModbusBase_t *m_t)
 //{
 //	// TO DO
@@ -447,6 +840,91 @@
 ///*-- MODBUS HATA KODUNU G�NDEREN FONKS�YON -------------------------------------
 // ExceptionCode ile girilen hata kodu master g�nderilir
 // ------------------------------------------------------------------------------*/
+//void sendExceptionCode(ModbusBase_t *m_t, uint8_t ExceptionCode)
+//{
+//	if (!(m_t->Modbus_status & MB_BROADCASTS))
+//	{
+//		m_t->ModbusBuffer[MASTER_READ_FUNC_INDEX] += 0x80;
+//		m_t->ModbusBuffer[MASTER_READ_FUNC_INDEX + 1] = ExceptionCode;
+//		sendResponse(m_t, 3); /* 3 Byte error cevab� g�nderilecek */
+//		return;
+//	}
+//	newFrameWait(m_t);
+//}
+//void ReadExceptionCode(ModbusBase_t *m_t)
+//{
+//	if (!(m_t->Modbus_status & MB_BROADCASTS))
+//	{
+//		// TO DO
+//		//ModbusMaster_ExceptionCallback
+//		return;
+//	}
+//	// newFrameWait();
+//}
+//
+//void sendResponse(ModbusBase_t *m_t, uint8_t RXTX_byte_number)
+//{
+//	if (!(m_t->Modbus_status & MB_BROADCASTS))
+//	{
+//		//RS485_TX_ENABLE();
+//		if (!m_t->HardwaveFlow)
+//		{
+//			//HAL_GPIO_WritePin(m_t->GPIOx,m_t->GPIO_Pin,GPIO_PIN_SET);
+//		}
+//		CRC16Calculate(m_t, RXTX_byte_number);
+//		m_t->ModbusBuffer[RXTX_byte_number] = m_t->CRCLo;
+//		m_t->ModbusBuffer[RXTX_byte_number + 1] = m_t->CRCHi;
+//		m_t->MB_registers.MB_byte_count = RXTX_byte_number + 1;
+//		m_t->MB_registers.MB_index = 0;
+//
+//		m_t->Modbus_status |= MB_TX_RUN; /* TX run enable*/
+//		HAL_UART_Transmit_IT(m_t->huart,
+//				&m_t->ModbusBuffer[m_t->MB_registers.MB_index],
+//				m_t->MB_registers.MB_byte_count + 1);
+//
+//		return;
+//	}
+//	//newFrameWait();
+//}
+//
+//
+//
+//void baudRateSet(ModbusBase_t *m_t, BR_define_td Baud_rate)
+//{
+//
+//	switch (Baud_rate)
+//	{
+//	case 0:
+//		m_t->Time1_5 = T1_5_2400BR;
+//		m_t->Time3_5 = T3_5_2400BR;
+//		break;
+//	case 1:
+//		m_t->Time1_5 = T1_5_4800BR;
+//		m_t->Time3_5 = T3_5_4800BR;
+//		break;
+//	case 2:
+//		m_t->Time1_5 = T1_5_9600BR;
+//		m_t->Time3_5 = T3_5_9600BR;
+//		break;
+//	case 3:
+//		m_t->Time1_5 = T1_5_19200BR;
+//		m_t->Time3_5 = T3_5_19200BR;
+//		break;
+//	case 4:
+//		m_t->Time1_5 = T1_5_HSPEED;
+//		m_t->Time3_5 = T3_5_HSPEED;
+//		break;
+//	case 5:
+//		m_t->Time1_5 = T1_5_HSPEED;
+//		m_t->Time3_5 = T3_5_HSPEED;
+//		break;
+//	case 6:
+//		m_t->Time1_5 = T1_5_HSPEED;
+//		m_t->Time3_5 = T3_5_HSPEED;
+//		break;
+//
+//	}
+//}
 //
 //__weak void ModbusMaster_ExceptionCallback(ModbusBase_t *m_t,
 //		uint8_t deviceAdress, uint8_t funcCode,

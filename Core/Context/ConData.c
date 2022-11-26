@@ -7,6 +7,4 @@ void ContextDataInit(CONTEXT_DATA_t *pCD)
 	LedDataInit(gPtrLedData);
 	DigitOutInit(gPtrDigitalOutData);
 	KeyboardInit();
-
 }
-

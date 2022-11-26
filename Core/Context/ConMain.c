@@ -65,15 +65,14 @@ void ContextMain()
 			}
 			ledSec = HAL_GetTick();
 		}
+
+		//----------ALL THE PROCESSING ------------------------------------
+
+		PwmProcess(gPtrPwmOutData);
+		LedProcess(gPtrLedData);
+		DigitalOutProcess(gPtrDigitalOutData);
+
+		ModBusSlave1Process(gPrtModSlaveData1);
+		ModBusSlave2Process(gPtrModSlaveData2);
 	}
-
-	//----------ALL THE PROCESSING ------------------------------------
-
-	PwmProcess(gPtrPwmOutData);
-	LedProcess(gPtrLedData);
-	DigitalOutProcess(gPtrDigitalOutData);
-
-	ModBusSlave1Process(gPrtModSlaveData1);
-	ModBusSlave2Process(gPtrModSlaveData2);
-
 }

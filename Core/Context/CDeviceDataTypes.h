@@ -70,8 +70,8 @@ typedef struct
 	PWM_OUT_DATA_t mPwmData;
 	LED_DATA_t mLedData;
 
-	MODBUS_SLAVE_DATA_t mModbusSlave1;
-	MODBUS_SLAVE_DATA_t mModbusSlave2;
+	MODBUS_DATA_t mModbusSlave1;
+	MODBUS_DATA_t mModbusSlave2;
 
 } CONTEXT_DATA_t;
 
