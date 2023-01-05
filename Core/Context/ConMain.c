@@ -7,12 +7,25 @@ void ContextInit()
 	gPtrDigitalOutData = &gContextLedData.mDigOutData;
 	gPtrLedData = &gContextLedData.mLedData;
 
-	gPrtModSlaveData1 = &gContextLedData.mModbusSlave1;
-	gPtrModSlaveData2 = &gContextLedData.mModbusSlave2;
+	PwmDataInit(gPtrPwmOutData);
+	LedDataInit(gPtrLedData);
+	DigitOutInit(gPtrDigitalOutData);
+	KeyboardInit();
 
-	ContextDataInit(gPtrCD);
+//	HAL_Delay(200);
 
-	HAL_Delay(200);
+	L4FLASH_Init();
+	InitUID();
+	InitAddress();
+	InitRNG(GetUIDStr());
+
+	(void) eMBInit(MB_RTU, AddressGet(), 0, 19200, MB_PAR_NONE);
+
+	//initialize failsafe timer
+	UpdateFailsafeTimer();
+
+	//FlashDataInit(gPtrLedData);
+
 }
 
 void ContextSystick(CONTEXT_DATA_t *pDat)
@@ -35,13 +48,29 @@ void ContextMain()
 	int lcnt = 1;
 
 	PwmSetPercent(gPtrPwmOutData, 1, 10);
-	PwmSetPercent(gPtrPwmOutData, 2, 30);
-	PwmSetPercent(gPtrPwmOutData, 3, 50);
-	PwmSetPercent(gPtrPwmOutData, 4, 80);
+	PwmSetPercent(gPtrPwmOutData, 2, 20);
+	PwmSetPercent(gPtrPwmOutData, 3, 30);
+	PwmSetPercent(gPtrPwmOutData, 4, 40);
 	ledSec = HAL_GetTick();
+
+	LedStateChange(gPtrLedData, 1, LED_STATE_ON, 0);
+	LedStateChange(gPtrLedData, 2, LED_STATE_OFF, 0);
+	LedStateChange(gPtrLedData, 3, LED_STATE_BLINK, 200);
+
+	LedStateChange(gPtrLedData, 1, LED_STATE_BLINK, 400);
+	LedStateChange(gPtrLedData, 2, LED_STATE_BLINK, 400);
+	LedStateChange(gPtrLedData, 3, LED_STATE_BLINK, 400);
+
+	uint8_t uartData[4];
+
+	uartData[0] = 'A';
+	uartData[1] = 'A';
+	uartData[2] = 'A';
+	uartData[3] = 'A';
 
 	while (1)
 	{
+		eMBPoll();
 
 		//-----SET DIRTY------------------------------
 
@@ -53,18 +82,10 @@ void ContextMain()
 			keypress = KEYBRD_NONE;
 		}
 
-		if (HAL_GetTick() - ledSec > 1000)
-		{
-
-			LedStateChange(gPtrLedData, lcnt, LED_STATE_ON, 0);
-			lcnt++;
-			if (lcnt > LED_COUNT - 1)
-			{
-				lcnt = 1;
-				asm("NOP");
-			}
-			ledSec = HAL_GetTick();
-		}
+		//	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, PinState);
+		HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin, GPIO_PIN_SET);
+		HAL_UART_Transmit(&huart1, uartData, 4, 1000);
+		HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin, GPIO_PIN_RESET);
 
 		//----------ALL THE PROCESSING ------------------------------------
 
@@ -72,7 +93,8 @@ void ContextMain()
 		LedProcess(gPtrLedData);
 		DigitalOutProcess(gPtrDigitalOutData);
 
-		ModBusSlave1Process(gPrtModSlaveData1);
-		ModBusSlave2Process(gPtrModSlaveData2);
+		//ModBusSlave1Process(gPrtModSlaveData1);
+		//ModBusSlave2Process(gPtrModSlaveData2);
+
 	}
 }

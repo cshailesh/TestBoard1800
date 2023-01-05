@@ -9,8 +9,6 @@
 
 #include <ConHeader.h>
 
-CONTEXT_DATA_t t;
-
 void ProcessKeyboardPress(CONTEXT_DATA_t *pCD, uint8_t pKey);
 
 #endif /* CONTEXT_CONKEYBRD_H_ */

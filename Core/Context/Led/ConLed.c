@@ -16,14 +16,14 @@ void LedStateChange(LED_DATA_t *pDat, uint8_t pLedNo, eLED_STATE pState,
 		eLED_BLINK_RATE pRate)
 {
 	_LedStateClear(pDat, pLedNo - 1);
-	if (pState != LED_STATE_BLINK)
+	if (pState == LED_STATE_BLINK)
 	{
 		pDat->mLedState[pLedNo - 1] = LED_STATE_BLINK;
 		pDat->mLedBlinkRate[pLedNo - 1] = pRate;
 	}
 	else
 	{
-		pDat->mLedState[pLedNo] = pState;
+		pDat->mLedState[pLedNo - 1] = pState;
 	}
 }
 
@@ -35,60 +35,20 @@ void LedProcess(LED_DATA_t *pDat)
 		{
 			if (pDat->mLedBlinkCnt[i] > pDat->mLedBlinkRate[i])
 			{
-				if (i == 0)
-				{
-					_LED1_TOG();
-					pDat->mLedBlinkCnt[i] = 0;
-				}
-				if (i == 1)
-				{
-					_LED2_TOG();
-					pDat->mLedBlinkCnt[i] = 0;
-				}
-				if (i == 2)
-				{
-					_LED3_TOG();
-					pDat->mLedBlinkCnt[i] = 0;
-				}
+				_LED_Toggle(i);
+				pDat->mLedBlinkCnt[i] = 0;
 			}
 		}
 		else if (pDat->mLedState[i] == LED_STATE_OFF)
 		{
-			if (i == 0)
-			{
-				_LED1_OFF();
-				pDat->mLedBlinkCnt[i] = 0;
-			}
-			if (i == 1)
-			{
-				_LED2_OFF();
-				pDat->mLedBlinkCnt[i] = 0;
-			}
-			if (i == 2)
-			{
-				_LED3_OFF();
-				pDat->mLedBlinkCnt[i] = 0;
-			}
+			_LED_SetOff(i);
+			pDat->mLedBlinkCnt[i] = 0;
 		}
 		else if (pDat->mLedState[i] == LED_STATE_ON)
 		{
-			if (i == 0)
-			{
-				_LED1_ON();
-				pDat->mLedBlinkCnt[i] = 0;
-			}
-			if (i == 1)
-			{
-				_LED2_ON();
-				pDat->mLedBlinkCnt[i] = 0;
-			}
-			if (i == 2)
-			{
-				_LED3_ON();
-				pDat->mLedBlinkCnt[i] = 0;
-			}
+			_LED_SetOn(i);
+			pDat->mLedBlinkCnt[i] = 0;
 		}
-
 	}
 }
 

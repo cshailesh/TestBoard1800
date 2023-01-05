@@ -2,7 +2,13 @@
 #define CONTEXT_CDEVICEDATATYPES_H_
 
 #include "main.h"
-#include "CModBusData.h"
+//#include "CModBusData.h"
+
+typedef struct {
+	GPIO_TypeDef* port;
+	uint32_t pin;
+} GPIO_t;
+
 
 typedef struct
 {
@@ -70,8 +76,8 @@ typedef struct
 	PWM_OUT_DATA_t mPwmData;
 	LED_DATA_t mLedData;
 
-	MODBUS_DATA_t mModbusSlave1;
-	MODBUS_DATA_t mModbusSlave2;
+//	MODBUS_DATA_t mModbusSlave1;
+//	MODBUS_DATA_t mModbusSlave2;
 
 } CONTEXT_DATA_t;
 

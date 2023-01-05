@@ -13,6 +13,10 @@ void FlashProcess(LED_DATA_t *pDat)
 void FlashDataInit(LED_DATA_t *pDat)
 {
 	W25qxx_Init();
+	W25qxx_EraseBlock(25);
+	W25qxx_ReadBytes(255, 265, 1024);
+	W25qxx_WritePage(255, 3, 0, 4);
+
 }
 
 void TaskFlash()

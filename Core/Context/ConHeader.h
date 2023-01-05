@@ -8,19 +8,26 @@
 #include "stdint.h"
 
 //-------- C'S ----------------------------------------------
+#include "projectDefs.h"
 #include <CDeviceDataTypes.h>
 #include "ConHalConfig.h"
 #include "CKeyboard.h"
 #include "CLed.h"
-#include "CDigitalOut.h"
+#include "CDigitalOutput.h"
 #include "CPwm.h"
+#include "modbusDriver/include/mb.h"
+//
+//#include "CModBusData.h"
+//#include "CModbusCrc.h"
+//#include "CModbusTiming.h"
+//#include "CModbusUart.h"
+//#include "CModbusSlave.h"
+//
 
-#include "CModBusData.h"
-#include "CModbusCrc.h"
-#include "CModbusTiming.h"
-#include "CModbusUart.h"
-#include "CModbusSlave.h"
-
+#include "l4flash.h"
+#include "rng.h"
+#include "addr.h"
+#include "failsafe.h"
 #include "CW25qxx.h"
 
 //-------- CON'S ----------------------------------------------

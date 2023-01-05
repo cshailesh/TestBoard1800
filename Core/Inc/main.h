@@ -28,6 +28,17 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g0xx_hal.h"
+#include "stm32g0xx_ll_crc.h"
+#include "stm32g0xx_ll_bus.h"
+#include "stm32g0xx_ll_cortex.h"
+#include "stm32g0xx_ll_rcc.h"
+#include "stm32g0xx_ll_system.h"
+#include "stm32g0xx_ll_utils.h"
+#include "stm32g0xx_ll_pwr.h"
+#include "stm32g0xx_ll_gpio.h"
+#include "stm32g0xx_ll_dma.h"
+
+#include "stm32g0xx_ll_exti.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -93,16 +104,16 @@ void Error_Handler(void);
 #define DOut2_GPIO_Port GPIOC
 #define DOut1_Pin GPIO_PIN_0
 #define DOut1_GPIO_Port GPIOD
-#define RS485_2_DE_Pin GPIO_PIN_2
-#define RS485_2_DE_GPIO_Port GPIOD
+#define USART3_DE_Pin GPIO_PIN_2
+#define USART3_DE_GPIO_Port GPIOD
 #define LED1_Pin GPIO_PIN_3
 #define LED1_GPIO_Port GPIOD
 #define LED2_Pin GPIO_PIN_4
 #define LED2_GPIO_Port GPIOD
 #define LED3_Pin GPIO_PIN_5
 #define LED3_GPIO_Port GPIOD
-#define RS485_1_DE_Pin GPIO_PIN_3
-#define RS485_1_DE_GPIO_Port GPIOB
+#define USART1_DE_Pin GPIO_PIN_3
+#define USART1_DE_GPIO_Port GPIOB
 #define RS485_1_TX_Pin GPIO_PIN_6
 #define RS485_1_TX_GPIO_Port GPIOB
 #define RS485_1_RX_Pin GPIO_PIN_7
@@ -111,6 +122,7 @@ void Error_Handler(void);
 #define RS485_2_RX_GPIO_Port GPIOB
 #define RS485_2_TX_Pin GPIO_PIN_10
 #define RS485_2_TX_GPIO_Port GPIOC
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

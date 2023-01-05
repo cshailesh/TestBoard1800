@@ -5,8 +5,8 @@
  *  Author: LINK4
  */
 
-#ifndef CONLED_H_
-#define CONLED_H_
+#ifndef CONFLASH_H_
+#define CONFLASH_H_
 
 #include <ConHeader.h>
 
