@@ -68,6 +68,9 @@ void ContextMain()
 	uartData[2] = 'A';
 	uartData[3] = 'A';
 
+	uint32_t serTicks;
+
+	serTicks = HAL_GetTick();
 	while (1)
 	{
 		eMBPoll();
@@ -82,11 +85,14 @@ void ContextMain()
 			keypress = KEYBRD_NONE;
 		}
 
-		//	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, PinState);
-		HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin, GPIO_PIN_SET);
-		HAL_UART_Transmit(&huart1, uartData, 4, 1000);
-		HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin, GPIO_PIN_RESET);
-
+		if (HAL_GetTick() - serTicks > 500)
+		{
+			//	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, PinState);
+			HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin, GPIO_PIN_SET);
+			HAL_UART_Transmit(&huart1, uartData, 4, 1000);
+			HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin,GPIO_PIN_RESET);
+			serTicks = HAL_GetTick();
+		}
 		//----------ALL THE PROCESSING ------------------------------------
 
 		PwmProcess(gPtrPwmOutData);

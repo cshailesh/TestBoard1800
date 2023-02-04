@@ -11,3 +11,6 @@
 9) ../Core/Context/Modbus/ModbusDriver/EEPROM_Emul\Porting\STM32G0
 
   HAL_IncTick();
+  
+  ST-LINK_CLI.exe -P C:\Temp\my_code.bin 0x08000000 -V
+  STM32_Programmer_CLI -c 
