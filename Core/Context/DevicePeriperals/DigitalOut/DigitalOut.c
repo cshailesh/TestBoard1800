@@ -2,7 +2,7 @@
  *  Created on: Feb 10, 2022
  *      Author: LINK4
  */
-#include "ConDigitalOut.h"
+#include <DigitalOut.h>
 
 void DigitalOutSetPin(DIGITAL_OUT_DATA_t *pDat, uint8_t pPinNo, uint8_t pHiLow)
 {
