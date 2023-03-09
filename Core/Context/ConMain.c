@@ -19,7 +19,9 @@ void ContextInit()
 	InitAddress();
 	InitRNG(GetUIDStr());
 
-	(void) eMBInit(MB_RTU, AddressGet(), 0, 19200, MB_PAR_NONE);
+    eMBDisable();
+    ( void ) eMBInit( MB_RTU, AddressGet(), 0, 19200, MB_PAR_NONE );
+    eMBEnable();
 
 	//initialize failsafe timer
 	UpdateFailsafeTimer();
@@ -41,6 +43,8 @@ void ContextSystick(CONTEXT_DATA_t *pDat)
 
 void ContextMain()
 {
+
+
 	uint8_t keypress = 0;
 
 	uint32_t ledSec;
