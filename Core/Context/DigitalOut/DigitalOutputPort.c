@@ -1,5 +1,5 @@
 
-#include "CDigitalOutput.h"
+#include "DigitalOutputPort.h"
 
 //extern uint32_t timeOn[];
 //extern uint32_t timeStart[];

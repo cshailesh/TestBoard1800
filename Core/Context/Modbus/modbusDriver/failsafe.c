@@ -1,7 +1,7 @@
 #include "failsafe.h"
 #include "stm32g0xx_hal.h"
 #include "main.h"
-#include "ConDigitalOut.h"
+#include "DigitalOut.h"
 #include "l4flash.h"
 
 static uint32_t failsafe_timer = 0;

@@ -7,7 +7,7 @@
 #include "ConModbusSlave.h"
 #include "uid.h"
 #include "addr.h"
-#include "CDigitalOutput.h"
+#include "DigitalOutputPort.h"
 #include "failsafe.h"
 #include "mb.h"
 #include "l4flash.h"

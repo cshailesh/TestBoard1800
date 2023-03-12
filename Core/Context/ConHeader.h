@@ -11,10 +11,10 @@
 #include "projectDefs.h"
 #include <CDeviceDataTypes.h>
 #include "ConHalConfig.h"
-#include "CKeyboard.h"
-#include "CLed.h"
-#include "CDigitalOutput.h"
-#include "CPwm.h"
+#include "KeyboardPort.h"
+#include "LedPort.h"
+#include "DigitalOutputPort.h"
+#include "Pwm.h"
 #include "modbusDriver/include/mb.h"
 //
 //#include "CModBusData.h"
@@ -32,11 +32,11 @@
 
 //-------- CON'S ----------------------------------------------
 #include <ConData.h>
-#include "ConKeybrd.h"
-#include "ConLed.h"
-#include "ConDigitalOut.h"
+#include "Keyboard.h"
+#include "Led.h"
+#include "DigitalOut.h"
 #include "ConModbusSlave.h"
-#include "ConFlashMem.h"
+#include "FlashMem.h"
 
 
 #endif /* CONTEXT_HEADER_H_ */

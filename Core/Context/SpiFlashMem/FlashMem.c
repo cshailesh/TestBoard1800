@@ -4,7 +4,7 @@
  *  Author: LINK4
  */
 
-#include "ConFlashMem.h"
+#include "FlashMem.h"
 
 void FlashProcess(LED_DATA_t *pDat)
 {

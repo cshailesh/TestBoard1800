@@ -5,7 +5,7 @@
  *  Author: LINK4
  */
 
-#include "CPwm.h"
+#include "Pwm.h"
 
 uint16_t _PwnCalcPuse(uint8_t pPer)
 {
