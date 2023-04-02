@@ -6,7 +6,7 @@
 #include "EEPROM_Emul/Core/eeprom_emul.h"
 #include "projectDefs.h"
 
-#define PROJECT_ID_VAL			14
+#define PROJECT_ID_VAL			20
 
 #define NUM_OUTPUT_BYTES (NUM_DISC_OUTPUTS / 8 + (_Bool)(NUM_DISC_OUTPUTS % 8))
 #define NUM_BITS_PER_BYTE		8

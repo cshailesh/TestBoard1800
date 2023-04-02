@@ -10,11 +10,8 @@
 uint8_t gKeyPressed;
 uint8_t gKeyLastPressed;
 
-//extern uint32_t timeOn[];
-//extern uint32_t timeStart[];
-//extern uint8_t bTime[];
-
 #define NUM_DIG_INPUT 4
+
 
 static GPIO_t DiscreteInput[NUM_DIG_INPUT] =
 {

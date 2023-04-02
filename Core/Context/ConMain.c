@@ -49,7 +49,7 @@ void ContextMain()
 
 	uint32_t ledSec;
 
-	int lcnt = 1;
+//	int lcnt = 1;
 
 	PwmSetPercent(gPtrPwmOutData, 1, 10);
 	PwmSetPercent(gPtrPwmOutData, 2, 20);

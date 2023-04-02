@@ -29,7 +29,7 @@
 
 #include "mbconfig.h"
 #include "mbAutoAddress-Slave.h"
-//#include "projectDefs.h"
+#include "projectDefs.h"
 
 
 #if MB_FUNC_DIAGNOSTICS_ENABLED > 0

@@ -19,19 +19,19 @@
 #ifndef PROJECTDEFS_H_
 #define PROJECTDEFS_H_
 
-#define FW_MAJOR_VERSION				1
-#define FW_MINOR_VERSION				0
+#define FW_MAJOR_VERSION			1
+#define FW_MINOR_VERSION			0
 
-#define USE_DEBUG_PRINTF				0
+#define USE_DEBUG_PRINTF			0
 #define TEST_CONFIGURATION			0
 
-#define DEBUG_POLLING						0
-#define DEBUG_MODBUS						0
-#define DEBUG_LEDS							0
-#define DEBUG_AUTOADDRESS				0
+#define DEBUG_POLLING				0
+#define DEBUG_MODBUS				0
+#define DEBUG_LEDS					0
+#define DEBUG_AUTOADDRESS			0
 
-#define FAKE_INPUTS							0
-#define DISABLE_MODBUS					0
+#define FAKE_INPUTS					0
+#define DISABLE_MODBUS				0
 #define DISABLE_AUTOADDRESS			0
 
 // If you want to hard-code a serial number, uncomment this and set it accordingly.
