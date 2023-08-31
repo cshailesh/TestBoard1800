@@ -59,6 +59,7 @@
 									<listOptionValue builtIn="false" value="../Core/Context/Key"/>
 									<listOptionValue builtIn="false" value="../Core/Context/Led"/>
 									<listOptionValue builtIn="false" value="../Core/Context/Pwm"/>
+									<listOptionValue builtIn="false" value="../Core/Context/Rs485"/>
 									<listOptionValue builtIn="false" value="../Core/Context"/>
 									<listOptionValue builtIn="false" value="../Drivers/STM32G0xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy"/>

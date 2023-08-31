@@ -52,7 +52,6 @@ typedef enum
 	C_OUTPUT8 = 7,
 } ModbusCoilRegister;
 
-
 eMBErrorCode eMBRegHoldingCB(UCHAR *pucRegBuffer, USHORT usAddress,
 		USHORT usNRegs, eMBRegisterMode eMode)
 {
@@ -235,6 +234,7 @@ eMBErrorCode eMBRegHoldingCB(UCHAR *pucRegBuffer, USHORT usAddress,
 							2 * (idx - UNIQUE_ID_START));
 				}
 				break;
+
 			}
 		}
 

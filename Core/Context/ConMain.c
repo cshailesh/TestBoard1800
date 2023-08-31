@@ -19,9 +19,9 @@ void ContextInit()
 	InitAddress();
 	InitRNG(GetUIDStr());
 
-    eMBDisable();
-    ( void ) eMBInit( MB_RTU, AddressGet(), 0, 19200, MB_PAR_NONE );
-    eMBEnable();
+	eMBDisable();
+	(void) eMBInit(MB_RTU, AddressGet(), 0, 19200, MB_PAR_NONE);
+	eMBEnable();
 
 	//initialize failsafe timer
 	UpdateFailsafeTimer();
@@ -44,7 +44,6 @@ void ContextSystick(CONTEXT_DATA_t *pDat)
 void ContextMain()
 {
 
-
 	uint8_t keypress = 0;
 
 	uint32_t ledSec;
@@ -65,13 +64,6 @@ void ContextMain()
 	LedStateChange(gPtrLedData, 2, LED_STATE_BLINK, 400);
 	LedStateChange(gPtrLedData, 3, LED_STATE_BLINK, 400);
 
-	uint8_t uartData[4];
-
-	uartData[0] = 'A';
-	uartData[1] = 'A';
-	uartData[2] = 'A';
-	uartData[3] = 'A';
-
 	uint32_t serTicks;
 
 	serTicks = HAL_GetTick();
@@ -91,10 +83,7 @@ void ContextMain()
 
 		if (HAL_GetTick() - serTicks > 500)
 		{
-			//	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, PinState);
-			HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin, GPIO_PIN_SET);
-			HAL_UART_Transmit(&huart1, uartData, 4, 1000);
-			HAL_GPIO_WritePin(USART1_DE_GPIO_Port, USART1_DE_Pin,GPIO_PIN_RESET);
+			SendTestData();
 			serTicks = HAL_GetTick();
 		}
 		//----------ALL THE PROCESSING ------------------------------------

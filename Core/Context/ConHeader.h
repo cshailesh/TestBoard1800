@@ -30,6 +30,7 @@
 #include "DigitalOut.h"
 #include "ConModbusSlave.h"
 #include "FlashMem.h"
+#include <Rs485/CRs485.h>
 
 
 #endif /* CONTEXT_HEADER_H_ */
